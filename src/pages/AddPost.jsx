@@ -34,7 +34,6 @@ const AddPost = () => {
       try {
         const file = await resizeFile(selectedImage);
         await setImage(file);
-        console.log(file);
       } catch (err) {
         console.log(err);
       }

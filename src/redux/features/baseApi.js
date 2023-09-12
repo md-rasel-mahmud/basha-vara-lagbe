@@ -1,13 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const baseApi = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_server_url}` }),
   endpoints: (builder) => ({
     getPosts: builder.query({
-      query: ({ page }) => `/posts?page=${page}&size=10`,
+      query: (page) => `/posts?page=${page}&size=10`,
+    }),
+    getPostsByEmail: builder.query({
+      query: (postByEmail) => `/posts-by-email?email=${postByEmail}`,
     }),
     getUser: builder.query({
-      query: ({ email }) => `/${email}`,
+      query: ({ email }) => `user/${email}`,
     }),
     postData: builder.mutation({
       query: (postBody) => ({
@@ -20,4 +23,8 @@ const baseApi = createApi({
 });
 export default baseApi;
 
-export const { useGetPostsQuery, usePostDataMutation } = baseApi;
+export const {
+  useLazyGetPostsQuery,
+  usePostDataMutation,
+  useGetPostsByEmailQuery,
+} = baseApi;

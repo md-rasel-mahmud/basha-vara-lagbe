@@ -18,7 +18,7 @@ const client = new MongoClient(process.env.MONGO_URI);
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const users = client.db("bvl").collection("users");
     const postCollection = client.db("bvl").collection("postCollection");
 
