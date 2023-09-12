@@ -3,8 +3,8 @@ import App from "../App";
 import Banner from "../pages/Banner";
 import MyPost from "../pages/MyPost";
 import AddPost from "../pages/AddPost";
-import Login from "../authentication/Login";
-import SignUp from "../authentication/SignUp";
+import SignUp from "../pages/auth/SignUp";
+import Login from "../pages/auth/Login";
 
 const router = createBrowserRouter([
   {

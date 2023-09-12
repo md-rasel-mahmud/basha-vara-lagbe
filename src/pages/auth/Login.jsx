@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import SocialLogin from "../../components/SocialLogin";
 const Login = () => {
   return (
     <div className="flex justify-center items-center flex-col min-h-screen">
@@ -13,7 +14,7 @@ const Login = () => {
             </label>
             <input
               type="text"
-              placeholder="email"
+              placeholder="Email"
               className="input input-bordered"
             />
           </div>
@@ -22,8 +23,8 @@ const Login = () => {
               <span className="label-text">Password</span>
             </label>
             <input
-              type="text"
-              placeholder="password"
+              type="password"
+              placeholder="Password"
               className="input input-bordered"
             />
             <label className="label">
@@ -39,6 +40,8 @@ const Login = () => {
           <div className="form-control mt-6">
             <button className="btn btn-primary">Login</button>
           </div>
+          <div className="divider">OR</div>
+          <SocialLogin />
         </div>
       </div>
     </div>

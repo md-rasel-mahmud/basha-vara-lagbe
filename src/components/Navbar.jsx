@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
+import { FaEnvelope, FaSignOutAlt, FaUser } from "react-icons/fa";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+  const [showMenu, setShowMenu] = useState(false);
+
+  // console.log(data);
 
   const navigation = (
     <>
@@ -53,35 +58,57 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{navigation}</ul>
         </div>
         <div className="navbar-end  ">
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-              </div>
-            </label>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <a className="capitalize text-secondary font-bold bg-primary/10">
-                  {user}
-                </a>
-              </li>
-              <li>
-                <a className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </a>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
-              </li>
-            </ul>
-          </div>
+          {!user ? (
+            <Link to="/auth/login" className="btn btn-primary btn-xs">
+              Login
+            </Link>
+          ) : (
+            <div className="dropdown dropdown-end">
+              <label
+                tabIndex={0}
+                onClick={() => setShowMenu(!showMenu)}
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-10 rounded-full">
+                  {user?.photoURL ? (
+                    <img src={user?.photoURL} alt={user?.name} />
+                  ) : (
+                    <FaUser />
+                  )}
+                </div>
+              </label>
+              {showMenu && (
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <a className="capitalize text-primary font-bold bg-accent/10">
+                      <FaUser /> {user?.displayName}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={`mailto:${user?.email}`}
+                      target="_blank"
+                      rel="noreferrer noopener noreferrer"
+                      className="capitalize "
+                    >
+                      <FaEnvelope /> {user?.email}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      onClick={() => logout()}
+                      className="text-secondary font-bold bg-secondary/10"
+                    >
+                      <FaSignOutAlt /> Logout
+                    </a>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

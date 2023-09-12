@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthProvider";
+import SocialLogin from "../../components/SocialLogin";
 
 const SignUp = () => {
-  const { signInWithGooglePopup } = useContext(AuthContext);
-  const handleGooglePopup = () => {
-    signInWithGooglePopup.then(() => {}).then((data) => console.log(data));
-  };
+  // if (user) {
+  //   updateUserProfile();
+  // }
   return (
     <div className="flex justify-center items-center flex-col min-h-screen">
       <h2 className="text-5xl uppercase font-semibold text-secondary mb-2">
@@ -77,14 +74,7 @@ const SignUp = () => {
             <button className="btn btn-primary">Sign Up</button>
           </div>
           <div className="divider">OR</div>
-          <div className="flex justify-center gap-2 text-3xl">
-            <button
-              onClick={handleGooglePopup}
-              className="bg-success p-4 hover:bg-primary  text-white rounded-full"
-            >
-              <FaGoogle />
-            </button>
-          </div>
+          <SocialLogin />
         </div>
       </div>
     </div>
