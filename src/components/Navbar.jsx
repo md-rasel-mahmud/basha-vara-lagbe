@@ -3,26 +3,33 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 import { FaEnvelope, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { useGetUserQuery } from "../redux/apiServices/user.service";
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
-
-  // console.log(data);
+  const { user, logout } = useContext(AuthContext);
+  const { data: userData } = useGetUserQuery(user?.email, {
+    skip: !user,
+  });
 
   const navigation = (
     <>
       <li>
         <Link to="/">Home</Link>
       </li>
-      <li>
-        <Link to="/my-post">My Post</Link>
-      </li>
-      <li>
-        <Link to="/add-post">Add Post</Link>
-      </li>
+      {user && (
+        <>
+          <li>
+            <Link to="/my-post">My Post</Link>
+          </li>
+          <li>
+            <Link to="/add-post">Add Post</Link>
+          </li>
+        </>
+      )}
     </>
   );
+  console.log(userData);
 
   return (
     <div className="bg-base-100 sticky top-0 z-50 shadow-md">
@@ -69,13 +76,16 @@ const Navbar = () => {
                 onClick={() => setShowMenu(!showMenu)}
                 className="btn btn-ghost btn-circle avatar"
               >
-                <div className="w-10 rounded-full">
-                  {user?.photoURL ? (
-                    <img src={user?.photoURL} alt={user?.name} />
-                  ) : (
-                    <FaUser />
-                  )}
-                </div>
+                {user?.photoURL || userData?.image ? (
+                  <div className="w-10 rounded-full">
+                    <img
+                      src={user?.photoURL || userData?.image}
+                      alt={user?.name}
+                    />
+                  </div>
+                ) : (
+                  <FaUser className="text-2xl " />
+                )}
               </label>
               {showMenu && (
                 <ul
@@ -84,7 +94,7 @@ const Navbar = () => {
                 >
                   <li>
                     <a className="capitalize text-primary font-bold bg-accent/10">
-                      <FaUser /> {user?.displayName}
+                      <FaUser /> {user?.displayName || userData?.name}
                     </a>
                   </li>
                   <li>
@@ -94,7 +104,7 @@ const Navbar = () => {
                       rel="noreferrer noopener noreferrer"
                       className="capitalize "
                     >
-                      <FaEnvelope /> {user?.email}
+                      <FaEnvelope /> {user?.email || userData?.email}
                     </a>
                   </li>
                   <li>

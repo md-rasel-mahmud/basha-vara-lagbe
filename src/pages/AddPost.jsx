@@ -1,15 +1,16 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
-import { usePostDataMutation } from "../redux/features/baseApi";
 import Resizer from "react-image-file-resizer";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { usePostDataMutation } from "../redux/apiServices/post.service";
 
 const AddPost = () => {
   const { user } = useContext(AuthContext);
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
-  const [setPostData, { data: responseData }] = usePostDataMutation();
+  const [setPostData, { data: responseData, isLoading }] =
+    usePostDataMutation();
 
   const resizeFile = (file) =>
     new Promise((resolve) => {
@@ -50,6 +51,7 @@ const AddPost = () => {
     const phone = form.phone.value;
     const formData = { name, phone, image, description, email };
     setPostData(formData);
+    form.reset();
   };
 
   const Toast = Swal.mixin({
@@ -133,8 +135,15 @@ const AddPost = () => {
             ></textarea>
           </div>
           <div className="form-control mt-6">
-            <button type="submit" className="btn btn-primary">
-              Add Post
+            <button
+              disabled={isLoading}
+              type="submit"
+              className="btn btn-primary"
+            >
+              Add Post{" "}
+              {isLoading && (
+                <span className="loading loading-bars loading-md"></span>
+              )}
             </button>
           </div>
         </form>

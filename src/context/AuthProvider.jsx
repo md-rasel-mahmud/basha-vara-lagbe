@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
@@ -16,23 +17,25 @@ const AuthProvider = ({ children }) => {
   const auth = getAuth(app);
 
   // create user using email and password
-  const signInWithEmailPass = (email, pass) => {
-    return createUserWithEmailAndPassword(auth, email, pass);
-  };
+  const signUpWithEmailPass = (email, pass) =>
+    createUserWithEmailAndPassword(auth, email, pass);
+
   // create user using google popup
   const googleProvider = new GoogleAuthProvider();
 
-  const signInWithGooglePopup = () => {
-    return signInWithPopup(auth, googleProvider);
-  };
+  // sign in with google popup
+  const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+
+  //manually login
+  const manuallyLogin = (email, pass) =>
+    signInWithEmailAndPassword(auth, email, pass);
 
   // updateProfile
-  const updateUserProfile = (updateName, photo) => {
-    return updateProfile(auth.currentUser, {
+  const updateUserProfile = (updateName, photo) =>
+    updateProfile(auth.currentUser, {
       displayName: updateName,
       photoURL: photo,
     });
-  };
 
   //observers the state of the user
   useEffect(() => {
@@ -51,10 +54,11 @@ const AuthProvider = ({ children }) => {
 
   const data = {
     user,
-    signInWithEmailPass,
+    signUpWithEmailPass,
     signInWithGooglePopup,
     logout,
     updateUserProfile,
+    manuallyLogin,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };

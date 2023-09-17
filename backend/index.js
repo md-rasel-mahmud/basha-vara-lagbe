@@ -12,7 +12,6 @@ app.use(cors());
 app.use(express.json());
 
 // local mongodb
-
 const client = new MongoClient(process.env.MONGO_URI);
 
 async function run() {
@@ -39,11 +38,17 @@ async function run() {
     });
 
     // get user by email
-    app.get("/user/:email", async (req, res) => {
-      const { email } = req.params;
-      const query = { email: email };
-      const result = await users.findOne(query);
-      res.send(result);
+    app.get("/user", async (req, res) => {
+      const { email, allUsers } = req.query;
+      if (email) {
+        const query = { email: email };
+        const result = await users.findOne(query);
+        return res.send(result);
+      }
+      if (allUsers) {
+        const allUsersResult = await users.find().toArray();
+        return res.send(allUsersResult);
+      }
     });
 
     //---------------------------------------
@@ -58,7 +63,7 @@ async function run() {
     });
 
     // get posts data by pagination
-    app.get("/posts", async (req, res) => {
+    app.get("/post", async (req, res) => {
       const page = parseInt(req.query.page);
       const size = parseInt(req.query.size);
 
@@ -77,8 +82,7 @@ async function run() {
     });
 
     // get post by user email
-
-    app.get("/posts-by-email", async (req, res) => {
+    app.get("/post/user", async (req, res) => {
       const { email } = req.query;
       const result = await postCollection.find({ email: email }).toArray();
 
@@ -126,4 +130,9 @@ run().catch(console.dir);
 // listen the app
 app.listen(process.env.PORT || 5000, () => {
   console.log("server is running on port 5000");
+});
+
+// check is server runing
+app.get("/", (req, res) => {
+  return res.send('<h1 style="text-align:center">Basha vara lagbe?</h1>');
 });
